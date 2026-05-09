@@ -1,0 +1,535 @@
+{
+  "config": {
+    "app": {
+      "id": "atlas-generator",
+      "name": "Atlas Generator",
+      "description": "A config-driven app runtime that turns JSON into working product screens.",
+      "defaultLocale": "en",
+      "locales": [
+        "en",
+        "es"
+      ],
+      "theme": "aurora"
+    },
+    "auth": {
+      "methods": [
+        "password",
+        "magicLink"
+      ],
+      "requireAuth": true,
+      "allowRegistration": true
+    },
+    "translations": {
+      "en": {
+        "appTitle": "Atlas Generator",
+        "heroTitle": "Generate an app from JSON.",
+        "heroSubtitle": "UI, APIs, auth, and data all respond to the same runtime config.",
+        "dashboard": "Dashboard",
+        "records": "Records",
+        "builder": "Builder",
+        "import": "CSV Import",
+        "notifications": "Notifications",
+        "auth": "Authentication",
+        "locale": "Locale",
+        "preview": "Live Preview",
+        "saveConfig": "Apply config",
+        "sampleConfig": "Load sample config",
+        "unknownComponent": "Unknown component",
+        "loading": "Loading runtime"
+      },
+      "es": {
+        "appTitle": "Generador Atlas",
+        "heroTitle": "Genera una app desde JSON.",
+        "heroSubtitle": "UI, APIs, auth y datos responden a la misma configuración.",
+        "dashboard": "Panel",
+        "records": "Registros",
+        "builder": "Constructor",
+        "import": "Importar CSV",
+        "notifications": "Notificaciones",
+        "auth": "Autenticación",
+        "locale": "Idioma",
+        "preview": "Vista en vivo",
+        "saveConfig": "Aplicar config",
+        "sampleConfig": "Cargar ejemplo",
+        "unknownComponent": "Componente desconocido",
+        "loading": "Cargando runtime"
+      }
+    },
+    "database": {
+      "dialect": "postgres",
+      "entities": [
+        {
+          "name": "customers",
+          "label": "Customers",
+          "description": "Primary customer directory for the generated app.",
+          "primaryKey": "id",
+          "fields": [
+            {
+              "name": "name",
+              "label": "Name",
+              "type": "string",
+              "required": true,
+              "optional": false,
+              "placeholder": "Ada Lovelace",
+              "options": []
+            },
+            {
+              "name": "email",
+              "label": "Email",
+              "type": "email",
+              "required": true,
+              "optional": false,
+              "placeholder": "ada@company.com",
+              "options": []
+            },
+            {
+              "name": "segment",
+              "label": "Segment",
+              "type": "enum",
+              "required": false,
+              "optional": false,
+              "defaultValue": "starter",
+              "placeholder": "",
+              "options": [
+                "enterprise",
+                "growth",
+                "starter"
+              ]
+            },
+            {
+              "name": "score",
+              "label": "Score",
+              "type": "number",
+              "required": false,
+              "optional": false,
+              "defaultValue": 72,
+              "placeholder": "",
+              "options": []
+            },
+            {
+              "name": "notes",
+              "label": "Notes",
+              "type": "textarea",
+              "required": false,
+              "optional": true,
+              "placeholder": "Context and handoff notes",
+              "options": []
+            }
+          ]
+        },
+        {
+          "name": "orders",
+          "label": "Orders",
+          "description": "Transactions that power the dashboard and table views.",
+          "primaryKey": "id",
+          "fields": [
+            {
+              "name": "title",
+              "label": "Title",
+              "type": "string",
+              "required": true,
+              "optional": false,
+              "placeholder": "Order #2001",
+              "options": []
+            },
+            {
+              "name": "customername",
+              "label": "Customer",
+              "type": "string",
+              "required": true,
+              "optional": false,
+              "placeholder": "Ada Lovelace",
+              "options": []
+            },
+            {
+              "name": "amount",
+              "label": "Amount",
+              "type": "number",
+              "required": true,
+              "optional": false,
+              "defaultValue": 0,
+              "placeholder": "",
+              "options": []
+            },
+            {
+              "name": "status",
+              "label": "Status",
+              "type": "enum",
+              "required": false,
+              "optional": false,
+              "defaultValue": "draft",
+              "placeholder": "",
+              "options": [
+                "draft",
+                "paid",
+                "shipped",
+                "complete"
+              ]
+            },
+            {
+              "name": "shippedat",
+              "label": "Shipped At",
+              "type": "date",
+              "required": false,
+              "optional": true,
+              "placeholder": "",
+              "options": []
+            }
+          ]
+        }
+      ]
+    },
+    "pages": [
+      {
+        "id": "dashboard",
+        "title": "Dashboard",
+        "component": "dashboard",
+        "entity": "orders",
+        "icon": "grid",
+        "layout": "stack"
+      },
+      {
+        "id": "customers",
+        "title": "Customers",
+        "component": "table",
+        "entity": "customers",
+        "icon": "table",
+        "layout": "stack"
+      },
+      {
+        "id": "customers-form",
+        "title": "Customer Form",
+        "component": "form",
+        "entity": "customers",
+        "icon": "edit",
+        "layout": "stack"
+      },
+      {
+        "id": "csv-import",
+        "title": "CSV Import",
+        "component": "csvImport",
+        "entity": "customers",
+        "icon": "upload",
+        "layout": "stack"
+      },
+      {
+        "id": "notifications",
+        "title": "Notifications",
+        "component": "notifications",
+        "entity": "system",
+        "icon": "bell",
+        "layout": "stack"
+      },
+      {
+        "id": "experimental",
+        "title": "Experimental Widget",
+        "component": "mysteryPanel",
+        "entity": "orders",
+        "icon": "spark",
+        "layout": "stack"
+      }
+    ],
+    "features": {
+      "csvImport": true,
+      "notifications": true,
+      "localization": true,
+      "auth": true
+    }
+  },
+  "users": [
+    {
+      "id": "ee4e59c8-f62c-4b29-aaaf-7d3d6ad502b9",
+      "email": "admin@atlas.local",
+      "password": {
+        "salt": "7626d6d5-2049-4bc3-8125-22252b4d2334",
+        "hash": "995146a231459203d21c66347dd5d8d75385c7522e541761a1995818a5f749e5"
+      },
+      "displayName": "Atlas Admin",
+      "role": "admin",
+      "locale": "en",
+      "methods": [
+        "password",
+        "magicLink"
+      ],
+      "createdAt": "2026-05-09T09:11:37.046Z",
+      "lastLoginAt": "2026-05-09T09:54:31.579Z"
+    },
+    {
+      "id": "2209e58d-385d-4449-86f7-294d9db1bfd4",
+      "email": "member@atlas.local",
+      "password": {
+        "salt": "41ff239e-4f44-478e-b431-e0867b223abb",
+        "hash": "e3fa681b589258269a446bc92e1d1ce718a4e918883d8436764adfe1e186b75f"
+      },
+      "displayName": "Atlas Member",
+      "role": "member",
+      "locale": "es",
+      "methods": [
+        "password",
+        "magicLink"
+      ],
+      "createdAt": "2026-05-09T09:11:37.047Z"
+    },
+    {
+      "id": "4ba2b533-a16a-43a0-b780-c7ed19c7c594",
+      "email": "sahithipasam06@gmail.com",
+      "password": {
+        "salt": "88832132-5130-4039-be4b-c21c6e73f4db",
+        "hash": "b603610533ed8ec20906bbe98d91ef42a4a27dd121572e07b11f80b6b6f1697f"
+      },
+      "displayName": "sahithi",
+      "role": "member",
+      "locale": "en",
+      "methods": [
+        "password",
+        "magicLink"
+      ],
+      "createdAt": "2026-05-09T10:30:58.422Z"
+    },
+    {
+      "id": "b81e90fe-a8f6-4373-b0e9-35b05e141271",
+      "email": "anu.pasem@gmail.com",
+      "password": {
+        "salt": "aefff720-1966-42b5-9fa3-3e68889335b4",
+        "hash": "494f6265504b06b69f47bd115ed84adaba174453ff44d83e3ec071b40642d677"
+      },
+      "displayName": "anu",
+      "role": "member",
+      "locale": "en",
+      "methods": [
+        "password",
+        "magicLink"
+      ],
+      "createdAt": "2026-05-09T10:54:25.360Z"
+    },
+    {
+      "id": "66a58320-4a3f-48c0-9f95-af42618bdfb6",
+      "email": "sahithipasam.ai@gmail.com",
+      "password": {
+        "salt": "229447d9-1fc1-4052-a568-a7950bf210b4",
+        "hash": "3d10c57dbfcfd3c04030f643ffd7e05673d54f28f10b1b23f60ab5338da334fa"
+      },
+      "displayName": "peach",
+      "role": "member",
+      "locale": "en",
+      "methods": [
+        "password",
+        "magicLink"
+      ],
+      "createdAt": "2026-05-09T11:05:32.780Z"
+    }
+  ],
+  "sessions": [
+    {
+      "token": "dce079db-b292-4ab9-b360-a555408a8d56",
+      "userId": "ee4e59c8-f62c-4b29-aaaf-7d3d6ad502b9",
+      "source": "password",
+      "createdAt": "2026-05-09T09:54:31.579Z",
+      "expiresAt": "2026-05-16T09:54:31.579Z"
+    },
+    {
+      "token": "1936b5d0-2090-487a-a30f-e455b1f2db58",
+      "userId": "66a58320-4a3f-48c0-9f95-af42618bdfb6",
+      "source": "register",
+      "createdAt": "2026-05-09T11:05:32.780Z",
+      "expiresAt": "2026-05-16T11:05:32.780Z"
+    }
+  ],
+  "magicLinks": [],
+  "notifications": [
+    {
+      "id": "21fa9d4a-1958-4211-b807-abe5f81675dc",
+      "userId": "66a58320-4a3f-48c0-9f95-af42618bdfb6",
+      "type": "auth.registered",
+      "title": "Account created",
+      "message": "Welcome, peach.",
+      "meta": {
+        "email": "sahithipasam.ai@gmail.com"
+      },
+      "readAt": null,
+      "createdAt": "2026-05-09T11:05:32.780Z"
+    },
+    {
+      "id": "564c0d76-273e-491f-93de-c688f672739d",
+      "userId": "b81e90fe-a8f6-4373-b0e9-35b05e141271",
+      "type": "auth.registered",
+      "title": "Account created",
+      "message": "Welcome, anu.",
+      "meta": {
+        "email": "anu.pasem@gmail.com"
+      },
+      "readAt": "2026-05-09T10:54:50.809Z",
+      "createdAt": "2026-05-09T10:54:25.361Z"
+    },
+    {
+      "id": "3d71c040-0c88-43f8-b229-e7e61ef6e968",
+      "userId": "4ba2b533-a16a-43a0-b780-c7ed19c7c594",
+      "type": "import.completed",
+      "title": "Customers imported",
+      "message": "Imported 2 customers records from CSV.",
+      "meta": {
+        "entity": "customers",
+        "count": 2
+      },
+      "readAt": "2026-05-09T10:51:22.855Z",
+      "createdAt": "2026-05-09T10:32:21.342Z"
+    },
+    {
+      "id": "7e4a20df-3630-4b61-aa1d-e679f30da1e2",
+      "userId": "4ba2b533-a16a-43a0-b780-c7ed19c7c594",
+      "type": "record.created",
+      "title": "Customers created",
+      "message": "Created a new customers record.",
+      "meta": {
+        "entity": "customers",
+        "recordId": "31340e82-7d16-4f14-b14d-742b2767c99e"
+      },
+      "readAt": "2026-05-09T10:51:22.855Z",
+      "createdAt": "2026-05-09T10:32:09.420Z"
+    },
+    {
+      "id": "612b9833-979d-4a36-b5f3-0b7662d6b495",
+      "userId": "4ba2b533-a16a-43a0-b780-c7ed19c7c594",
+      "type": "record.deleted",
+      "title": "Customers deleted",
+      "message": "Deleted customers record 5fd6f17d-9d7c-405f-a462-e2c49c5dcb9d.",
+      "meta": {
+        "entity": "customers",
+        "recordId": "5fd6f17d-9d7c-405f-a462-e2c49c5dcb9d"
+      },
+      "readAt": "2026-05-09T10:51:22.855Z",
+      "createdAt": "2026-05-09T10:31:47.200Z"
+    },
+    {
+      "id": "cf1f9bec-6fd0-4800-b22a-259eac211f46",
+      "userId": "4ba2b533-a16a-43a0-b780-c7ed19c7c594",
+      "type": "auth.registered",
+      "title": "Account created",
+      "message": "Welcome, sahithi.",
+      "meta": {
+        "email": "sahithipasam06@gmail.com"
+      },
+      "readAt": "2026-05-09T10:31:17.770Z",
+      "createdAt": "2026-05-09T10:30:58.422Z"
+    },
+    {
+      "id": "64c3c92f-2cb5-471c-972d-7f94b343b89f",
+      "userId": "ee4e59c8-f62c-4b29-aaaf-7d3d6ad502b9",
+      "type": "auth.login",
+      "title": "Signed in",
+      "message": "You signed in as Atlas Admin.",
+      "meta": {
+        "method": "password"
+      },
+      "readAt": "2026-05-09T09:54:35.047Z",
+      "createdAt": "2026-05-09T09:54:31.579Z"
+    },
+    {
+      "id": "6e3f1f5c-48f1-4d35-9532-d5725214fa9d",
+      "userId": "ee4e59c8-f62c-4b29-aaaf-7d3d6ad502b9",
+      "type": "auth.login",
+      "title": "Signed in",
+      "message": "You signed in as Atlas Admin.",
+      "meta": {
+        "method": "password"
+      },
+      "readAt": "2026-05-09T09:54:35.047Z",
+      "createdAt": "2026-05-09T09:14:56.550Z"
+    }
+  ],
+  "records": {
+    "customers": [
+      {
+        "id": "73282294-f836-42b2-9a9b-213382f8b155",
+        "ownerId": "4ba2b533-a16a-43a0-b780-c7ed19c7c594",
+        "data": {
+          "name": "Jonas Reed",
+          "email": "jonas@northwind.dev",
+          "segment": "growth",
+          "score": 88,
+          "notes": "Needs quarterly check-in"
+        },
+        "extras": {},
+        "createdAt": "2026-05-09T10:32:21.342Z",
+        "updatedAt": "2026-05-09T10:32:21.342Z"
+      },
+      {
+        "id": "813e5408-ab6e-403c-b07d-e6c86f37412f",
+        "ownerId": "4ba2b533-a16a-43a0-b780-c7ed19c7c594",
+        "data": {
+          "name": "Maria Chen",
+          "email": "maria@northwind.dev",
+          "segment": "enterprise",
+          "score": 97,
+          "notes": "Imported from events booth"
+        },
+        "extras": {},
+        "createdAt": "2026-05-09T10:32:21.342Z",
+        "updatedAt": "2026-05-09T10:32:21.342Z"
+      },
+      {
+        "id": "31340e82-7d16-4f14-b14d-742b2767c99e",
+        "ownerId": "4ba2b533-a16a-43a0-b780-c7ed19c7c594",
+        "data": {
+          "name": "sahithi",
+          "email": "sahithi.ai@gmail.com",
+          "segment": "starter",
+          "score": 72,
+          "notes": ""
+        },
+        "extras": {},
+        "createdAt": "2026-05-09T10:32:09.420Z",
+        "updatedAt": "2026-05-09T10:32:09.420Z"
+      },
+      {
+        "id": "fa64f6b1-66fa-4c25-84d5-1163dcc6214e",
+        "ownerId": "2209e58d-385d-4449-86f7-294d9db1bfd4",
+        "data": {
+          "name": "Grace Hopper",
+          "email": "grace@atlas.local",
+          "segment": "growth",
+          "score": 91,
+          "notes": "Prefers weekly summaries"
+        },
+        "extras": {
+          "source": "seed"
+        },
+        "createdAt": "2026-05-09T09:11:37.047Z",
+        "updatedAt": "2026-05-09T09:11:37.047Z"
+      }
+    ],
+    "orders": [
+      {
+        "id": "f981cf05-a2b7-4bad-a814-89c273ed6144",
+        "ownerId": "ee4e59c8-f62c-4b29-aaaf-7d3d6ad502b9",
+        "data": {
+          "title": "Order #2001",
+          "customerName": "Ada Lovelace",
+          "amount": 1800,
+          "status": "paid",
+          "shippedAt": "2026-05-03"
+        },
+        "extras": {
+          "priority": "high"
+        },
+        "createdAt": "2026-05-09T09:11:37.047Z",
+        "updatedAt": "2026-05-09T09:11:37.047Z"
+      }
+    ]
+  },
+  "archivedRecords": {},
+  "auditLog": [
+    {
+      "id": "65194c2e-2b52-4f05-bbc1-9ff09463be5a",
+      "type": "runtime.updated",
+      "createdAt": "2026-05-09T10:31:07.525Z",
+      "details": []
+    },
+    {
+      "id": "d48a1b2c-8d2c-49c0-890f-99a32100200d",
+      "type": "runtime.updated",
+      "createdAt": "2026-05-09T09:54:49.136Z",
+      "details": []
+    }
+  ]
+}
