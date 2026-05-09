@@ -44,6 +44,26 @@ function sendText(response, statusCode, content, contentType = 'text/plain; char
   response.end(content)
 }
 
+function setCorsHeaders(request, response) {
+  const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    process.env.FRONTEND_URL,
+  ].filter(Boolean)
+  
+  const origin = request.headers.origin || ''
+  const isAllowed = allowedOrigins.some(allowed => 
+    allowed === origin || allowed === '*'
+  )
+  
+  if (isAllowed) {
+    response.setHeader('Access-Control-Allow-Origin', origin || allowedOrigins[0])
+    response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+    response.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    response.setHeader('Access-Control-Max-Age', '86400')
+  }
+}
+
 function getToken(request) {
   const header = request.headers.authorization || ''
   if (header.startsWith('Bearer ')) {
@@ -268,6 +288,16 @@ async function createServer() {
   const server = createHttpServer(async (request, response) => {
     const host = request.headers.host || `localhost:${port}`
     const url = new URL(request.url || '/', `http://${host}`)
+
+    // Set CORS headers for all requests
+    setCorsHeaders(request, response)
+
+    // Handle OPTIONS preflight requests
+    if (request.method === 'OPTIONS') {
+      response.statusCode = 204
+      response.end()
+      return
+    }
 
     if (url.pathname.startsWith('/api/')) {
       await handleApi(request, response, url)
