@@ -1,5 +1,8 @@
+const API_URL = import.meta.env.VITE_PUBLIC_API_URL || ''
+
 async function request(path, options = {}) {
-  const response = await fetch(path, {
+  const url = `${API_URL}${path}`
+  const response = await fetch(url, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
