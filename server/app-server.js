@@ -175,12 +175,70 @@ async function handleApi(request, response, url) {
   const user = session ? getCurrentUser(store, session.userId) : null
   const entityRoutes = buildEntityRoutes(runtime)
 
+  if (request.method === 'GET' && url.pathname === '/api/health') {
+    return sendJson(response, 200, { ok: true, mode: isProd ? 'production' : 'development' })
+  }
+
   if (request.method === 'GET' && url.pathname === '/api/runtime') {
     return sendJson(response, 200, {
       config: runtime.config,
+      warnings: runtime.warnings,
+      summary: runtime.summary,
+      pages: runtime.config.pages,
       user,
-      session
+      session: session ? { token: session.token, userId: session.userId, expiresAt: session.expiresAt } : null,
     })
+  }
+
+  if (request.method === 'POST' && url.pathname === '/api/auth/register') {
+    const body = await parseJsonBody(request)
+    const result = await createUser(store, body)
+    return sendJson(response, result.status, result.body)
+  }
+
+  if (request.method === 'POST' && url.pathname === '/api/auth/login') {
+    const body = await parseJsonBody(request)
+    const result = await verifyPasswordLogin(store, body)
+    return sendJson(response, result.status, result.body)
+  }
+
+  if (request.method === 'POST' && url.pathname === '/api/auth/magic-link') {
+    const body = await parseJsonBody(request)
+    const result = await sendMagicLink(store, body)
+    return sendJson(response, result.status, result.body)
+  }
+
+  if (request.method === 'POST' && url.pathname === '/api/auth/magic-link/verify') {
+    const body = await parseJsonBody(request)
+    const result = await verifyMagicLink(store, body)
+    return sendJson(response, result.status, result.body)
+  }
+
+  if (request.method === 'GET' && url.pathname === '/api/auth/me') {
+    if (!session || !user) {
+      return sendJson(response, 401, { error: 'Not authenticated' })
+    }
+    return sendJson(response, 200, { user, session })
+  }
+
+  if (request.method === 'POST' && url.pathname === '/api/auth/logout') {
+    if (session) {
+      await createAuthSession(store, session.userId, 'logout', { revoke: true })
+    }
+    return sendJson(response, 200, { ok: true })
+  }
+
+  if (request.method === 'GET' && url.pathname === '/api/notifications') {
+    if (!user) {
+      return sendJson(response, 401, { error: 'Not authenticated' })
+    }
+    return sendJson(response, 200, { notifications: getNotifications(store, user) })
+  }
+
+  if (request.method === 'POST' && url.pathname === '/api/notifications/read') {
+    const body = await parseJsonBody(request)
+    const result = await markNotificationsRead(store, body.notificationIds || [], user)
+    return sendJson(response, result.status, result.body)
   }
 
   const matched = matchRoute(entityRoutes, request.method, url.pathname)
